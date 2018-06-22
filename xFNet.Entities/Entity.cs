@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace xFNet.Context
+namespace xFNet.Entities
 {
-    public class Class1
+    [Serializable]
+    public abstract class Entity
     {
+        public abstract object Id { get; set; }
     }
 }
