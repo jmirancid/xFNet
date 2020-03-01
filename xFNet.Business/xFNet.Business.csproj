@@ -52,10 +52,6 @@
       <Project>{1b2a81e5-cb5b-4aec-82b5-98c4a908568c}</Project>
       <Name>xFNet.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\xFNet.Repositories\xFNet.Repositories.csproj">
-      <Project>{924762f5-f7d5-477a-b890-b69bcd6271e1}</Project>
-      <Name>xFNet.Repositories</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

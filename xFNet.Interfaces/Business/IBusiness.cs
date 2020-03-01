@@ -11,8 +11,16 @@ namespace xFNet.Interfaces.Business
         where TEntity : Entity, new()
     {
         void Create(TEntity entity);
+        void Create(IEnumerable<TEntity> entities);
+
         void Update(TEntity entity);
+        void Update(IEnumerable<TEntity> entities);
+
+        void CreateOrUpdate(TEntity entity);
+        void CreateOrUpdate(IEnumerable<TEntity> entities);
+
         void Delete(TEntity entity);
+        void Delete(IEnumerable<TEntity> entites);
 
         TEntity Get(object id);
         TEntity GetBy(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate);

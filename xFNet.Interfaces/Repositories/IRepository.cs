@@ -10,9 +10,22 @@ namespace xFNet.Interfaces.Repositories
     public interface IRepository<TEntity>
         where TEntity : Entity, new()
     {
+        // TODO: 
+        //  - Add include properties (maybe with lambda property navigator)
+        //  - order by (maybe with lambda property navigator)
+        //  - implement async methods
+
         void Create(TEntity entity);
+        void Create(IEnumerable<TEntity> entities);
+
         void Update(TEntity entity);
+        void Update(IEnumerable<TEntity> entities);
+
+        void CreateOrUpdate(TEntity entity);
+        void CreateOrUpdate(IEnumerable<TEntity> entities);
+
         void Delete(TEntity entity);
+        void Delete(IEnumerable<TEntity> entites);
 
         TEntity Get(object id);
         TEntity GetBy(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate);
@@ -25,5 +38,7 @@ namespace xFNet.Interfaces.Repositories
 
         int Count();
         int CountBy(System.Linq.Expressions.Expression<Func<TEntity, bool>> predicate);
+
+        void Save();
     }
 }

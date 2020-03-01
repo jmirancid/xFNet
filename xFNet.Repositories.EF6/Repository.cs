@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Data.Entity.Core;
 using System.Data.Entity.Core.Objects;
 using System.Linq;
@@ -9,32 +11,36 @@ using SqlProviderServices = System.Data.Entity.SqlServer.SqlProviderServices;
 
 namespace xFNet.Repositories.EF6
 {
-    public abstract class Repository<TContext, TEntity> : IRepository<TEntity>
+    public abstract class Repository<TEntity> : IRepository<TEntity>
             where TEntity : Entity, new()
-            where TContext : ObjectContext, new()
     {
-        private TContext _context;
+        protected DbContext Context { get; set; }
 
-        protected TContext Context
+        public Repository() { }
+
+        public Repository(DbContext context)
         {
-            get
-            {
-                if (_context == null)
-                {
-                    _context = new TContext();
-                    _context.ContextOptions.LazyLoadingEnabled = false;
-                    _context.ContextOptions.ProxyCreationEnabled = false;
-                }
-                return _context;
-            }
+            this.Context = context;
         }
 
         public virtual void Create(TEntity entity)
         {
             try
             {
-                Context.CreateObjectSet<TEntity>().AddObject(entity);
-                Context.SaveChanges();
+                this.Context.Set<TEntity>().Add(entity);
+            }
+            catch (Exception ex)
+            {
+                //throw RepositoryExceptionHandler.GetException(ex);
+                throw ex;
+            }
+        }
+
+        public virtual void Create(IEnumerable<TEntity> entities)
+        {
+            try
+            {
+                this.Context.Set<TEntity>().AddRange(entities);
             }
             catch (Exception ex)
             {
@@ -47,17 +53,55 @@ namespace xFNet.Repositories.EF6
         {
             try
             {
-                EntityKey key =
-                    Context.CreateEntityKey(Context.CreateObjectSet<TEntity>().EntitySet.Name, entity);
+                TEntity aux = this.Get(entity.Id);
+                if (aux == null) return;
 
-                TEntity aux = null;
-                aux = (TEntity)Context.GetObjectByKey(key);
+                this.Context.Entry<TEntity>(aux).CurrentValues.SetValues(entity);
+            }
+            catch (Exception ex)
+            {
+                //throw RepositoryExceptionHandler.GetException(ex);
+                throw ex;
+            }
+        }
 
-                Context.CreateObjectSet<TEntity>().ApplyCurrentValues(entity);
-                Context.ObjectStateManager.GetObjectStateEntry(aux).ChangeState(EntityState.Modified);
-                Context.ObjectStateManager.ChangeObjectState(aux, EntityState.Modified);
+        public virtual void Update(IEnumerable<TEntity> entities)
+        {
+            try
+            {
+                foreach(TEntity entity in entities)
+                {
+                    this.Update(entity);
+                }
+            }
+            catch (Exception ex)
+            {
+                //throw RepositoryExceptionHandler.GetException(ex);
+                throw ex;
+            }
+        }
 
-                Context.SaveChanges();
+        public virtual void CreateOrUpdate(TEntity entity)
+        {
+            try
+            {
+                this.Context.Set<TEntity>().AddOrUpdate(entity);
+            }
+            catch (Exception ex)
+            {
+                //throw RepositoryExceptionHandler.GetException(ex);
+                throw ex;
+            }
+        }
+
+        public virtual void CreateOrUpdate(IEnumerable<TEntity> entities)
+        {
+            try
+            {
+                foreach(TEntity entity in entities)
+                {
+                    this.CreateOrUpdate(entity);
+                }
             }
             catch (Exception ex)
             {
@@ -70,8 +114,20 @@ namespace xFNet.Repositories.EF6
         {
             try
             {
-                Context.CreateObjectSet<TEntity>().DeleteObject(entity);
-                Context.SaveChanges();
+                this.Context.Set<TEntity>().Remove(entity);
+            }
+            catch (Exception ex)
+            {
+                //throw RepositoryExceptionHandler.GetException(ex);
+                throw ex;
+            }
+        }
+
+        public virtual void Delete(IEnumerable<TEntity> entities)
+        {
+            try
+            {
+                this.Context.Set<TEntity>().RemoveRange(entities);
             }
             catch (Exception ex)
             {
@@ -82,19 +138,13 @@ namespace xFNet.Repositories.EF6
 
         public virtual TEntity Get(object id)
         {
-            var entity = new TEntity();
-            (entity as Entity).Id = id;
-
-            EntityKey key =
-                Context.CreateEntityKey(Context.CreateObjectSet<TEntity>().EntitySet.Name, entity);
-
             try
             {
-                entity = (TEntity)Context.GetObjectByKey(key);
-                return entity;
+                return this.Context.Set<TEntity>().Find(id);
             }
-            catch (ObjectNotFoundException ex)
+            catch (Exception ex)
             {
+                //throw ObjectNotFoundException(ex);
                 throw ex;
             }
         }
@@ -103,10 +153,11 @@ namespace xFNet.Repositories.EF6
         {
             try
             {
-                return Context.CreateObjectSet<TEntity>().FirstOrDefault(predicate);
+                return this.Context.Set<TEntity>().FirstOrDefault(predicate);
             }
-            catch (ObjectNotFoundException ex)
+            catch (Exception ex)
             {
+                //throw ObjectNotFoundException(ex);
                 throw ex;
             }
         }
@@ -115,7 +166,7 @@ namespace xFNet.Repositories.EF6
         {
             try
             {
-                return Context.CreateObjectSet<TEntity>().AsQueryable();
+                return this.Context.Set<TEntity>().AsQueryable();
             }
             catch (Exception ex)
             {
@@ -128,7 +179,7 @@ namespace xFNet.Repositories.EF6
         {
             try
             {
-                return Context.CreateObjectSet<TEntity>().Where(predicate).AsQueryable();
+                return this.Context.Set<TEntity>().Where(predicate);
             }
             catch (Exception ex)
             {
@@ -141,10 +192,11 @@ namespace xFNet.Repositories.EF6
         {
             try
             {
-                return Context.CreateObjectSet<TEntity>().Skip(skip).Take(take);
+                return this.Context.Set<TEntity>().Skip(skip).Take(take);
             }
             catch (Exception ex)
             {
+                //throw RepositoryExceptionHandler.GetException(ex);
                 throw ex;
             }
         }
@@ -153,10 +205,11 @@ namespace xFNet.Repositories.EF6
         {
             try
             {
-                return Context.CreateObjectSet<TEntity>().Where(predicate).Skip(skip).Take(take);
+                return this.Context.Set<TEntity>().Where(predicate).Skip(skip).Take(take);
             }
             catch (Exception ex)
             {
+                //throw RepositoryExceptionHandler.GetException(ex);
                 throw ex;
             }
         }
@@ -165,7 +218,7 @@ namespace xFNet.Repositories.EF6
         {
             try
             {
-                return Context.CreateObjectSet<TEntity>().Count();
+                return this.Context.Set<TEntity>().Count();
             }
             catch (Exception ex)
             {
@@ -178,7 +231,20 @@ namespace xFNet.Repositories.EF6
         {
             try
             {
-                return Context.CreateObjectSet<TEntity>().Count(predicate);
+                return this.Context.Set<TEntity>().Count(predicate);
+            }
+            catch (Exception ex)
+            {
+                //throw RepositoryExceptionHandler.GetException(ex);
+                throw ex;
+            }
+        }
+
+        public virtual void Save()
+        {
+            try
+            {
+                this.Context.SaveChanges();
             }
             catch (Exception ex)
             {
