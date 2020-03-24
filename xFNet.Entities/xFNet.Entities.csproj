@@ -42,16 +42,16 @@
   <ItemGroup>
     <Compile Include="Entity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\Validation.Designer.cs">
+    <Compile Include="Resources\ValidationResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Validation.resx</DependentUpon>
+      <DependentUpon>ValidationResource.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Validation.resx">
+    <EmbeddedResource Include="Resources\ValidationResource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Validation.Designer.cs</LastGenOutput>
+      <LastGenOutput>ValidationResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
