@@ -22,7 +22,7 @@ namespace xFNet.Entities.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ValidationResource {
+    public class ValidationResource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace xFNet.Entities.Resources {
         ///   Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("xFNet.Entities.Resources.ValidationResource", typeof(ValidationResource).Assembly);
@@ -51,7 +51,7 @@ namespace xFNet.Entities.Resources {
         ///   búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace xFNet.Entities.Resources {
         /// <summary>
         ///   Busca una cadena traducida similar a This field exceeds the maximum length allowed.
         /// </summary>
-        internal static string Exceeded_Length {
+        public static string Exceeded_Length {
             get {
                 return ResourceManager.GetString("Exceeded_Length", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace xFNet.Entities.Resources {
         /// <summary>
         ///   Busca una cadena traducida similar a Please enter a valid email.
         /// </summary>
-        internal static string Invalid_Email {
+        public static string Invalid_Email {
             get {
                 return ResourceManager.GetString("Invalid_Email", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace xFNet.Entities.Resources {
         /// <summary>
         ///   Busca una cadena traducida similar a The field accepts only numeric characters.
         /// </summary>
-        internal static string Only_Number {
+        public static string Only_Number {
             get {
                 return ResourceManager.GetString("Only_Number", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace xFNet.Entities.Resources {
         /// <summary>
         ///   Busca una cadena traducida similar a This field is required.
         /// </summary>
-        internal static string Required {
+        public static string Required {
             get {
                 return ResourceManager.GetString("Required", resourceCulture);
             }
