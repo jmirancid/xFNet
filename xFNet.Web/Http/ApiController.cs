@@ -23,7 +23,6 @@ namespace xFNet.Web.Http
         }
 
         [HttpGet]
-        // GET: api/student
         public IEnumerable<TEntity> All()
         {
             try
@@ -36,7 +35,7 @@ namespace xFNet.Web.Http
             }
         }
 
-        // GET: api/student/5
+        [HttpGet]
         public TEntity Get(int id)
         {
             try
@@ -49,7 +48,7 @@ namespace xFNet.Web.Http
             }
         }
 
-        // POST: api/student
+        [HttpPost]
         public void Post([FromBody]TEntity value)
         {
             try
@@ -65,7 +64,7 @@ namespace xFNet.Web.Http
             }
         }
 
-        // PUT: api/student/5
+        [HttpPut]
         public void Put(int id, [FromBody]TEntity value)
         {
             try
@@ -81,7 +80,7 @@ namespace xFNet.Web.Http
             }
         }
 
-        // DELETE: api/student/5
+        [HttpDelete]
         public void Delete(int id)
         {
             try
