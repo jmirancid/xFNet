@@ -16,13 +16,6 @@ namespace xFNet.Repositories.EF6
     {
         protected DbContext Context { get; set; }
 
-        public Repository() { }
-
-        public Repository(DbContext context)
-        {
-            this.Context = context;
-        }
-
         public virtual void Create(TEntity entity)
         {
             try
