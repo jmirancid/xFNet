@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 using xFNet.Entities;
 using xFNet.Interfaces.Business;
 
 namespace xFNet.Web.Http
 {
-    public abstract class ApiController<TBusiness, TEntity> : System.Web.Http.ApiController
-            where TBusiness : IBusiness<TEntity>, new()
+    public abstract class ApiController<TEntity, TBusiness> : System.Web.Http.ApiController
             where TEntity : Entity, new()
+            where TBusiness : IBusiness<TEntity>, new()
     {
-        protected Lazy<TBusiness> Business { get; set; }
+        readonly TBusiness bizEntity;
 
         public ApiController() { }
 
-        public ApiController(TBusiness business)
+        public ApiController(TBusiness bizEntity)
         {
-            this.Business = new Lazy<TBusiness>(() => business);
+            this.bizEntity = bizEntity;
         }
 
         [HttpGet]
@@ -27,7 +24,7 @@ namespace xFNet.Web.Http
         {
             try
             {
-                return this.Business.Value.All();
+                return bizEntity.All();
             }
             catch (Exception ex)
             {
@@ -40,7 +37,7 @@ namespace xFNet.Web.Http
         {
             try
             {
-                return this.Business.Value.Get(id);
+                return bizEntity.Get(id);
             }
             catch (Exception ex)
             {
@@ -56,7 +53,7 @@ namespace xFNet.Web.Http
                 if (value == null)
                     BadRequest();
 
-                this.Business.Value.Create(value);
+                bizEntity.Create(value);
             }
             catch (Exception ex)
             {
@@ -72,7 +69,7 @@ namespace xFNet.Web.Http
                 if (value == null)
                     BadRequest();
 
-                this.Business.Value.Update(value);
+                bizEntity.Update(value);
             }
             catch (Exception ex)
             {
@@ -85,7 +82,7 @@ namespace xFNet.Web.Http
         {
             try
             {
-                this.Business.Value.Delete(new TEntity());
+                bizEntity.Delete(new TEntity { Id = id });
             }
             catch (Exception ex)
             {
